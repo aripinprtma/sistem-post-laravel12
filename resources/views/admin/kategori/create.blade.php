@@ -1,0 +1,14 @@
+<x-layout>
+    <h3 class="text-center my-5">Tambah Kategori</h3>
+
+    <form action="{{ route('kategori.store') }}" method="POST">
+        @csrf
+        <div class="mb-3">
+            <label for="nama_kategori" class="form-label">Nama Kategori</label>
+            <input type="text" class="form-control" id="nama_kategori" name="nama_kategori" required>
+        </div>
+        <button type="submit" class="btn btn-primary">Simpan Kategori</button>
+    </form>
+
+    <a href="{{ route('kategori.index') }}" class="btn btn-secondary my-3">Kembali ke Daftar Kategori</a>
+</x-layout>
