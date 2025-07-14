@@ -68,7 +68,8 @@ class ProdukController extends Controller
      */
     public function edit(Produk $produk)
     {
-        //
+        $kategori = Kategori::all();
+        return view('admin.produk.edit', compact('produk', 'kategori'));
     }
 
     /**
@@ -76,7 +77,27 @@ class ProdukController extends Controller
      */
     public function update(Request $request, Produk $produk)
     {
-        //
+        $request->validate([
+            'nama_produk' => 'required|string|max:255',
+            'harga_produk' => 'required|numeric',
+            'stok_produk' => 'required|integer',
+            'gambar_produk' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
+            'deskripsi_produk' => 'nullable|string',
+            'kategori_id' => 'required|exists:kategoris,id',
+        ]);
+
+        $data = $request->except('gambar_produk');
+
+        if ($request->hasFile('gambar_produk')) {
+            $file = $request->file('gambar_produk');
+            $filename = $file->getClientOriginalName();
+            $file->move(public_path('images/produk'), $filename);
+            $data['gambar_produk'] = $filename;
+        }
+
+        $produk->update($data);
+
+        return redirect()->route('produk.index')->with('success', 'Produk updated successfully.');
     }
 
     /**
